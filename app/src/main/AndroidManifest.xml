@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.arch.androidipc">
 
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <application
         android:name="com.arch.application.IPCApplication"
         android:allowBackup="true"
@@ -17,6 +18,38 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name="com.arch.ipccenter.back.BackEngine"
+            android:exported="false"
+            android:label="BackEngine">
+            <!-- 基于安全原因，标记为false， -->
+            <intent-filter>
+                <action android:name="com.mistong.ipccenter.back.BackService" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name="com.arch.ipccenter.fore.ForeService"
+            android:exported="false"
+            android:process=":fore">
+
+            <!-- 基于安全原因，标记为false -->
+            <intent-filter>
+                <action android:name="com.mistong.ipccenter.fore.ForeService" />
+            </intent-filter>
+        </service>
+
+        <!--&lt;!&ndash;add fore service to start fore process&ndash;&gt;-->
+        <!--<service-->
+            <!--android:name="com.arch.ipccenter.fore.ForeService"-->
+            <!--android:process=":fore"-->
+            <!--android:enabled="true"-->
+            <!--android:exported="true">-->
+
+        <!--</service>-->
     </application>
 
 </manifest>

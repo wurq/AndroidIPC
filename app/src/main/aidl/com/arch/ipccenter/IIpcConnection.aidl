@@ -2,7 +2,7 @@
 package com.arch.ipccenter;
 
 // Declare any non-default types here with import statements
-import com.mistong.ipccenter.IIpcCallback;
+import com.arch.ipccenter.IIpcCallback;
 
 interface IIpcConnection {
     int ipcCall(in int ipcMsg, in Bundle inBundle, inout Bundle inoutBundle);

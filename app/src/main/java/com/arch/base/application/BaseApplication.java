@@ -7,8 +7,15 @@ import android.app.Application;
  */
 
 public abstract class BaseApplication extends Application {
+
+    private static BaseApplication sContext;
+
+    public static BaseApplication getApplication(){
+        return sContext;
+    }
     @Override
     public void onCreate() {
         super.onCreate();
+        sContext = this;
     }
 }
