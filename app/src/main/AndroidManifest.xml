@@ -23,11 +23,11 @@
             android:name="com.arch.ipccenter.back.BackEngine"
             android:exported="false"
             android:label="BackEngine">
-            <!-- 基于安全原因，标记为false， -->
             <intent-filter>
-                <action android:name="com.mistong.ipccenter.back.BackService" />
+                <action android:name="com.arch.ipccenter.back.BackEngine" />
+                <!--<action android:name="android.intent.action.SEND" />-->
 
-                <category android:name="android.intent.category.DEFAULT" />
+                <!--<category android:name="android.intent.category.DEFAULT" />-->
             </intent-filter>
         </service>
 
@@ -35,21 +35,12 @@
             android:name="com.arch.ipccenter.fore.ForeService"
             android:exported="false"
             android:process=":fore">
-
-            <!-- 基于安全原因，标记为false -->
             <intent-filter>
-                <action android:name="com.mistong.ipccenter.fore.ForeService" />
+                <action android:name="com.arch.ipccenter.fore.ForeService" />
             </intent-filter>
         </service>
 
-        <!--&lt;!&ndash;add fore service to start fore process&ndash;&gt;-->
-        <!--<service-->
-            <!--android:name="com.arch.ipccenter.fore.ForeService"-->
-            <!--android:process=":fore"-->
-            <!--android:enabled="true"-->
-            <!--android:exported="true">-->
 
-        <!--</service>-->
     </application>
 
 </manifest>

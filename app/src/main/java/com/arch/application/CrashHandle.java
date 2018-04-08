@@ -64,7 +64,7 @@ public class CrashHandle implements UncaughtExceptionHandler{
      * @param context
      */
     public void init(Context context) {
-        if(ServEnv.isDebug() == false) {
+        if(ServEnv.isDebug() == true) {
             mContext = context;
 
             //获取系统默认的UncaughtException处理器
