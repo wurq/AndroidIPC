@@ -1,6 +1,6 @@
 /*
  * This file is auto-generated.  DO NOT MODIFY.
- * Original file: /Users/wurongqiu/Android/github/AndroidIPC/app/src/main/aidl/com/arch/ipccenter/IIpcConnection.aidl
+ * Original file: /main/aidl/com/arch/ipccenter/IIpcConnection.aidl
  */
 package com.arch.ipccenter.base;
 
@@ -109,17 +109,17 @@ public interface IIpcConnection extends IInterface
 
         private static class Proxy implements IIpcConnection {
             private IBinder mRemote;
-            Proxy(android.os.IBinder remote) {
+            Proxy(IBinder remote) {
                 mRemote = remote;
             }
 
 
             @Override
-            public android.os.IBinder asBinder() {
+            public IBinder asBinder() {
                 return mRemote;
             }
 
-            public java.lang.String getInterfaceDescriptor() {
+            public String getInterfaceDescriptor() {
                 return DESCRIPTOR;
             }
 
@@ -163,8 +163,8 @@ public interface IIpcConnection extends IInterface
 
             @Override
             public void regCallback(IIpcCallback callback) throws RemoteException {
-                Parcel _data = android.os.Parcel.obtain();
-                Parcel _reply = android.os.Parcel.obtain();
+                Parcel _data = Parcel.obtain();
+                Parcel _reply = Parcel.obtain();
 
                 try {
                     _data.writeInterfaceToken(DESCRIPTOR);
@@ -181,8 +181,8 @@ public interface IIpcConnection extends IInterface
             @Override
             public void unregCallback(IIpcCallback callback) throws RemoteException {
 
-                Parcel _data = android.os.Parcel.obtain();
-                Parcel _reply = android.os.Parcel.obtain();
+                Parcel _data = Parcel.obtain();
+                Parcel _reply = Parcel.obtain();
 
                 try {
                     _data.writeInterfaceToken(DESCRIPTOR);

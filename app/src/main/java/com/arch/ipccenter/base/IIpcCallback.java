@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.IInterface;
 import android.os.Parcel;
+import android.os.Parcelable;
 import android.os.RemoteException;
 
 public interface IIpcCallback extends android.os.IInterface {
@@ -69,7 +70,7 @@ public static abstract class Stub extends Binder implements IIpcCallback {
                 reply.writeInt(_result);
                 if ((_arg2!=null)) {
                     reply.writeInt(1);
-                    _arg2.writeToParcel(reply, android.os.Parcelable.PARCELABLE_WRITE_RETURN_VALUE);
+                    _arg2.writeToParcel(reply, Parcelable.PARCELABLE_WRITE_RETURN_VALUE);
                 }
                 else {
                     reply.writeInt(0);
@@ -99,7 +100,8 @@ public static abstract class Stub extends Binder implements IIpcCallback {
         }
 
         @Override
-        public int onIpcCallback(int callbackId, Bundle inBundle, Bundle inoutBundle) throws RemoteException {
+        public int onIpcCallback(int callbackId, Bundle inBundle, Bundle inoutBundle)
+                throws RemoteException {
             Parcel _data = Parcel.obtain();
             Parcel _reply = Parcel.obtain();
             int _result;
