@@ -11,7 +11,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity"
+            android:process=":fore"
+            android:screenOrientation="portrait"
+            android:theme="@style/BaseAppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,9 +29,6 @@
             android:label="BackEngine">
             <intent-filter>
                 <action android:name="com.arch.ipccenter.back.BackEngine" />
-                <!--<action android:name="android.intent.action.SEND" />-->
-
-                <!--<category android:name="android.intent.category.DEFAULT" />-->
             </intent-filter>
         </service>
 

@@ -4,6 +4,8 @@ import android.app.ActivityManager;
 import android.content.Context;
 
 import com.arch.base.application.BaseApplication;
+import com.arch.commonconst.AppProcess;
+import com.arch.commonconst.RunType;
 
 import java.util.List;
 
@@ -98,5 +100,23 @@ public class ProcessUtil {
      */
     public static void killProcess(int pid) {
         android.os.Process.killProcess(pid);
+    }
+
+    /*
+     *  当前进程的类型
+     *  获取当前所在的进程的类型：前台/后台
+     */
+    public static int getCurrentProcessRunType() {
+        int currentProcessRuntype = RunType.RUN_IN_EXCEPTION;
+        String pname = ProcessUtil.getProcessNameByPid(android.os.Process.myPid());
+        if(AppProcess.BACKGROUND_PROCESS.equalsIgnoreCase(pname)) {
+            currentProcessRuntype = RunType.RUN_IN_BACKGROUND;
+        }
+        else if(AppProcess.FOREGROUND_PROCESS.equalsIgnoreCase(pname)) {
+            currentProcessRuntype = RunType.RUN_IN_FOREGROUND;
+        }else if(AppProcess.TASK_PROCESS.equalsIgnoreCase(pname)){
+            currentProcessRuntype = RunType.RUN_IN_TASK;
+        }
+        return currentProcessRuntype;
     }
 }

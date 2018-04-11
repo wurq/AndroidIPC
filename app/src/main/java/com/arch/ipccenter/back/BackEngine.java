@@ -1,6 +1,7 @@
 package com.arch.ipccenter.back;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.DeadObjectException;
@@ -14,6 +15,9 @@ import android.util.Log;
 import com.arch.application.CrashHandle;
 import com.arch.ipccenter.IIpcCallback;
 import com.arch.ipccenter.IIpcConnection;
+import com.arch.ipccenter.base.IpcCenter;
+
+import java.util.ArrayList;
 
 /**
  * Created by wurongqiu on 2018/3/30.
@@ -54,6 +58,7 @@ public class BackEngine extends Service {
         @Override
         public int ipcCall(int ipcMsg, Bundle inBundle, Bundle inoutBundle) throws RemoteException {
             int err;
+            Log.d(TAG,"ipcCall ipcMsg = "+ ipcMsg );
             try {
                 err = handleIpcCall(ipcMsg, inBundle, inoutBundle);
             } catch (Exception e) {
@@ -61,6 +66,7 @@ public class BackEngine extends Service {
 //                err = MeriErrCode.MERI_ERR_UNKNOWN;
                 throw new RuntimeException(e);
             }
+            Log.d(TAG,"ipcCall err = "+ err );
             return err;
         }
 
@@ -162,4 +168,56 @@ public class BackEngine extends Service {
     public static BackEngine getBackEngine() {
         return sInstance;
     }
+
+    @Override
+    public void onCreate() {
+        long startTime = 0;
+        super.onCreate();
+        Log.d(TAG,"onCreate entering...");
+//        // 提高进程优先级
+//        if (SDKUtil.getSDKVersion() >= SDKUtil.OS_2_0
+//                && SDKUtil.getSDKVersion() < SDKUtil.OS_4_3_0) {
+//            IServiceForegroundSetter setter = new ServiceForegroundSetterV2(this);
+//            setter.setEnable(true);
+//        }
+
+//        initAsyncCall();
+        // 监听ipc消息
+        BackIpcCenter.getInstance().regIpcReceiverEx(mIpcReceiver);
+    }
+
+    public static void start(Context context) {
+        Intent intent = new Intent();
+        intent.setClass(context, BackEngine.class);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startService(intent);
+    }
+
+
+    IpcCenter.IIpcReceiverEx mIpcReceiver = new IpcCenter.IIpcReceiverEx() {
+        @Override
+        public ArrayList<Integer> getRegisterMsgIds() {
+            Log.d(TAG,"IpcCenter.IIpcReceiverEx getRegisterMsgIds entering...");
+            ArrayList<Integer> msgList = new ArrayList<Integer>();
+            msgList.add(IpcCenter.IpcMsg.F2B_HANDLED_BY_BACK_EX);
+            msgList.add(IpcCenter.IpcMsg.F2B_TO_LIVE_PLAYER);
+//            msgList.add(IpcCenter.IpcMsg.F2B_HANDLED_BY_BACKGROUND_HOST);
+            return msgList;
+//            return null;
+        }
+
+        @Override
+        public int onIpcCall(int ipcMsg, Bundle inBundle, Bundle outBundle) {
+            switch (ipcMsg) {
+                case IpcCenter.IpcMsg.F2B_HANDLED_BY_BACK_EX:
+                {
+                    Log.d(TAG,"F2B_HANDLED_BY_BACK_EX entering...");
+                }
+                break;
+                default:
+                    break;
+            }
+            return 0;
+        }
+    };
 }

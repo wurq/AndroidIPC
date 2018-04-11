@@ -5,12 +5,15 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
+import android.os.RemoteException;
 import android.util.Log;
 
 import com.arch.application.AppProfile;
 import com.arch.commonconst.HostAction;
+import com.arch.ipccenter.IIpcCallback;
 import com.arch.ipccenter.IIpcConnection;
 import com.arch.ipccenter.base.IpcCenter;
 
@@ -92,7 +95,7 @@ public class ForeEngine {
         }
 
         /**
-         * unbinService成功后会被调用。 移除先前注册的回调。
+         * unbindService成功后会被调用。 移除先前注册的回调。
          */
         @Override
         public void onServiceDisconnected(ComponentName name) {
@@ -104,9 +107,50 @@ public class ForeEngine {
 
 
     private void onBackServiceConnected(ComponentName name, IBinder service) {
+        if (service == null) {
+            mIsBackConnected = false;
+            mBackEngine = null;
+            return;
+        }
+
+        mBackEngine = IIpcConnection.Stub.asInterface(service);
+        if (mBackEngine != null) {
+            try {
+                mIsBackConnected = true;
+                sConnectRetryCount = 0;
+
+                mBackEngine.regCallback(mIpcCallback);
+            } catch (RemoteException e) {
+                Log.e(TAG, "ipc err @ onServiceConnected:" + e.getMessage(), e);
+            }
+        }
     }
 
     private void onBackServiceDisconnected(ComponentName name) {
+    }
+
+
+    /**
+     * 后台service回调方法。
+     */
+    IIpcCallback mIpcCallback = new IIpcCallback.Stub() {
+        @Override
+        public int onIpcCallback(int ipcMsg, Bundle inBundle, Bundle outBundle) throws RemoteException {
+            int err;
+            try {
+                err = handleIpcCallback(ipcMsg, inBundle, outBundle);
+            } catch (Exception e) {
+                err = -1;//MeriErrCode.MERI_ERR_UNKNOWN;
+                throw new RuntimeException(e);
+            }
+            return err;
+        }
+    };
+
+    int handleIpcCallback(int ipcMsg, Bundle inBundle, Bundle outBundle) {
+        Log.i(TAG, "call back from background @ id :" + ipcMsg);
+        int err = ForeIpcCenter.getInstance().onIpcCall(ipcMsg, inBundle, outBundle);
+        return err;
     }
 
     /*
@@ -158,6 +202,42 @@ public class ForeEngine {
                 }
             }, 1000);
         }
+    }
+
+    public int ipcCallBackEngine(int ipcMsg, Bundle inBundle, Bundle inoutBundle) {
+//        int err = MeriErrCode.MERI_ERR_NONE;
+        int err = 0;
+        try {
+            if (mBackEngine != null && mIsBackConnected) {
+                if (inBundle == null) {
+                    inBundle = new Bundle();
+                }
+                if (inoutBundle == null) {
+                    inoutBundle = new Bundle();
+                }
+                err = mBackEngine.ipcCall(ipcMsg, inBundle, inoutBundle);
+            } else {
+//                err = MeriErrCode.MERI_ERR_AIDL_ERR;
+//                Log.e(TAG, "ipcCallBackEngine(), method(" + ipcMsg + "), - back engine is not connected");
+            }
+        } catch (RemoteException e) {
+//            err = MeriErrCode.MERI_ERR_AIDL_ERR;
+//            Log.e(TAG, "ipcCallBackEngine(), method(" + ipcMsg + "), - aidl err: " + e.getMessage(), e);
+        } catch (SecurityException e) {
+//            err = MeriErrCode.MERI_ERR_AIDL_ERR;
+//            Log.e(TAG, "ipcCallBackEngine(), method(" + ipcMsg + "), - aidl err: " + e.getMessage(), e);
+        }
+
+        // 重连
+//        if (err == MeriErrCode.MERI_ERR_AIDL_ERR) {
+//            mAidlErrCount++;
+//            if (mAidlErrCount == 5) {
+//                mAidlErrCount = 0;
+//                // connect后台，确保前后台通道连通
+//                mForeMainHandler.sendEmptyMessageDelayed(MSG_TRY_CONNECT_BACK_ENGINE, 500);
+//            }
+//        }
+        return err;
     }
 
 

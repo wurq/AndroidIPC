@@ -9,8 +9,12 @@ import android.os.Message;
 import android.util.Log;
 
 import com.arch.base.application.BaseApplication;
+import com.arch.base.util.ProcessUtil;
 
 import java.lang.ref.WeakReference;
+
+import static com.arch.ipccenter.fore.ForeEngine.MAX_CONNECT_RETRY_COUNT;
+import static com.arch.ipccenter.fore.ForeEngine.sConnectRetryCount;
 
 
 public class ForeEngineHandler extends Handler {
@@ -44,14 +48,14 @@ public class ForeEngineHandler extends Handler {
                         }
 
                         // 当连接后台次数大于阈值时，重启
-//                        sConnectRetryCount++;
-//                        if (sConnectRetryCount >= MAX_CONNECT_RETRY_COUNT) {
-//                            sConnectRetryCount = 0;
-//                            Log.i(TAG, "connect back engine more than retry count");
-//
-//                            ProcessUtil.killProcess(android.os.Process.myPid());
-//
-//                        }
+                        sConnectRetryCount++;
+                        if (sConnectRetryCount >= MAX_CONNECT_RETRY_COUNT) {
+                            sConnectRetryCount = 0;
+                            Log.i(TAG, "connect back engine more than retry count");
+
+                            ProcessUtil.killProcess(android.os.Process.myPid());
+
+                        }
                     } else {
                         Log.d(TAG, "connect back engine, ignore");
                     }
