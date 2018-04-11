@@ -13,8 +13,8 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.arch.application.CrashHandle;
-import com.arch.ipccenter.IIpcCallback;
-import com.arch.ipccenter.IIpcConnection;
+import com.arch.ipccenter.base.IIpcConnection;
+import com.arch.ipccenter.base.IIpcCallback;
 import com.arch.ipccenter.base.IpcCenter;
 
 import java.util.ArrayList;

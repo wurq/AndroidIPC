@@ -13,8 +13,8 @@ import android.util.Log;
 
 import com.arch.application.AppProfile;
 import com.arch.commonconst.HostAction;
-import com.arch.ipccenter.IIpcCallback;
-import com.arch.ipccenter.IIpcConnection;
+import com.arch.ipccenter.base.IIpcCallback;
+import com.arch.ipccenter.base.IIpcConnection;
 import com.arch.ipccenter.base.IpcCenter;
 
 import static com.arch.ipccenter.fore.ForeEngineHandler.MSG_TRY_CONNECT_BACK_ENGINE;
