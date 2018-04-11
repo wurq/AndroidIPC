@@ -16,7 +16,7 @@ public interface IIpcConnection extends IInterface
 {
     /** Local-side IPC implementation stub class. */
     public static abstract class Stub extends Binder implements IIpcConnection {
-        private static final java.lang.String DESCRIPTOR = "com.arch.ipccenter.base.IIpcConnection";
+        private static final String DESCRIPTOR = "com.arch.ipccenter.base.IIpcConnection";
         /** Construct the stub at attach it to the interface. */
         public Stub() {
             this.attachInterface(this, DESCRIPTOR);
