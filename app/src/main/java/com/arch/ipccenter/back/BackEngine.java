@@ -12,6 +12,7 @@ import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.arch.androidipc.BackExActivity;
 import com.arch.application.CrashHandle;
 import com.arch.ipccenter.IIpcCallback;
 import com.arch.ipccenter.IIpcConnection;
@@ -212,6 +213,7 @@ public class BackEngine extends Service {
                 case IpcCenter.IpcMsg.F2B_HANDLED_BY_BACK_EX:
                 {
                     Log.d(TAG,"F2B_HANDLED_BY_BACK_EX entering...");
+                    BackExActivity.ipcStart(BackEngine.this);
                 }
                 break;
                 default:
